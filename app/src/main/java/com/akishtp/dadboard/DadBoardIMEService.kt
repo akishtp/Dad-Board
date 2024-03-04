@@ -39,11 +39,19 @@ class DadBoardIMEService:InputMethodService() {
                 key.text = keyLabel
                 key.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 key.setOnClickListener {
-                    val inputConnection = currentInputConnection
-                    inputConnection?.commitText(keyLabel, 1)
+                    when(keyLabel){
+                        "          " -> inputText(" ")
+                        "←" -> handleBackspace()
+                        else -> inputText(keyLabel)
+                    }
                 }
                 key.setPadding(0,0,0,0)
-                val color = ContextCompat.getColor(this, R.color.primary80)
+                var color = ContextCompat.getColor(this, R.color.white);
+                if(keyLabel == "↵"){
+                    color = ContextCompat.getColor(this, R.color.primary80)
+                }else if(keyLabel == "←" || keyLabel == "."){
+                    color = ContextCompat.getColor(this, R.color.primary90)
+                }
 
                 // Add rounded corners and border
                 val cornerRadius = resources.displayMetrics.density * 16 // 8dp
@@ -64,5 +72,23 @@ class DadBoardIMEService:InputMethodService() {
             layout.addView(rowLayout)
         }
         return layout
+    }
+
+    private fun handleBackspace() {
+        val inputConnection = currentInputConnection
+        val selectedText = inputConnection?.getSelectedText(0)
+
+        if (selectedText.isNullOrEmpty()) {
+            // No text is selected, so delete the character before the cursor
+            inputConnection?.deleteSurroundingText(1, 0)
+        } else {
+            // Text is selected, so delete the selection
+            inputConnection?.commitText("", 1)
+        }
+    }
+
+    private fun inputText(text: String) {
+        val inputConnection = currentInputConnection
+        inputConnection?.commitText(text, 1)
     }
 }
