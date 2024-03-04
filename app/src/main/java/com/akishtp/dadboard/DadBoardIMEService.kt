@@ -46,7 +46,7 @@ class DadBoardIMEService:InputMethodService() {
                     }
                 }
                 key.setPadding(0,0,0,0)
-                var color = ContextCompat.getColor(this, R.color.white);
+                var color = ContextCompat.getColor(this, R.color.white)
                 if(keyLabel == "↵"){
                     color = ContextCompat.getColor(this, R.color.primary80)
                 }else if(keyLabel == "←" || keyLabel == "."){
@@ -83,7 +83,7 @@ class DadBoardIMEService:InputMethodService() {
             inputConnection?.deleteSurroundingText(1, 0)
         } else {
             // Text is selected, so delete the selection
-            inputConnection?.commitText("", 1)
+            inputConnection.commitText("", 1)
         }
     }
 
